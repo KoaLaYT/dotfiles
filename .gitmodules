@@ -1,3 +1,6 @@
 [submodule ".vim/pack/bundle/start/gundo"]
 	path = .vim/pack/bundle/start/gundo
 	url = https://github.com/sjl/gundo.vim.git
+[submodule "/home/koalayt/.vim/pack/bundle/start/lightline"]
+	path = /home/koalayt/.vim/pack/bundle/start/lightline
+	url = https://github.com/itchyny/lightline.vim

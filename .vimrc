@@ -1,7 +1,15 @@
 " [1] plugins {{{
 
-" [1.1] Gundo {{{
+" [1.1] gundo {{{
 nnoremap <leader>uu :GundoToggle<CR>            " toggle gundo
+" }}}
+
+" [1.2] lightline {{{
+set noshowmode        " hiden the default --INSERT-- 
+set laststatus=2
+let g:lightline = {
+      \ 'colorscheme': 'solarized',
+      \ }
 " }}}
 
 " }}}
@@ -13,8 +21,8 @@ colorscheme solarized
 " }}}
 
 " [3] spaces & tabs {{{
-set tabstop=4		" number of visual space per TAB
-set softtabstop=4 	" number of spaces in tab when editing
+set tabstop=2		" number of visual space per TAB
+set softtabstop=2 	" number of spaces in tab when editing
 set expandtab		" tabs are spaces
 " }}}
 
@@ -61,6 +69,20 @@ nnoremap j gj                                   " move vertically by visual line
 nnoremap k gk
 
 nnoremap gV `[v`]                               " highlight last inserted text
+
+" [7.1] auto closing
+inoremap {<CR> {<CR>}<ESC>O
+" }}}
+
+" [8] code format {{{
+
+" [8.1] for cpp
+function! FormatOnSave()
+    let l:formatdiff = 1
+    pyf /usr/share/clang/clang-format.py
+endfunction
+autocmd BufWritePre *.h,*.cc,*.cpp call FormatOnSave()
+
 " }}}
 
 " vim:foldmethod=marker:foldlevel=0
