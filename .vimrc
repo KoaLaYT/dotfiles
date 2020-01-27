@@ -85,4 +85,8 @@ autocmd BufWritePre *.h,*.cc,*.cpp call FormatOnSave()
 
 " }}}
 
+" [9] auto indent {{{
+set autoindent
+" }}}
+
 " vim:foldmethod=marker:foldlevel=0
