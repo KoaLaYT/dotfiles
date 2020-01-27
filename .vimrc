@@ -79,7 +79,12 @@ inoremap {<CR> {<CR>}<ESC>O
 " [8.1] for cpp
 function! FormatOnSave()
     let l:formatdiff = 1
-    pyf /usr/share/clang/clang-format.py
+    let l:uname = substitute(system('uname'), '\n', '', '') " detect system
+    if l:uname == 'Darwin'
+      pyf /usr/local/Cellar/clang-format/2019-05-14/share/clang/clang-format.py
+    else " Linux system
+      pyf /usr/share/clang/clang-format.py
+    endif
 endfunction
 autocmd BufWritePre *.h,*.cc,*.cpp call FormatOnSave()
 
