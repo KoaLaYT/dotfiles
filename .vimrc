@@ -22,6 +22,9 @@ inoremap <expr> <cr>    pumvisible() ? "\<C-y>" : "\<cr>"
 let g:lsp_signs_enabled = 1           " enable signs
 let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
 
+" auto format on save c/c++ files
+autocmd BufWritePre *.h,*.cc,*.cpp LspDocumentFormat
+
 " use clangd for c/c++
 if executable('clangd')
     au User lsp_setup call lsp#register_server({
@@ -30,6 +33,10 @@ if executable('clangd')
             \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
             \ })
 endif
+
+" key bindings
+nnoremap <leader>h :LspHover<CR>
+nnoremap <leader>e :LspDocumentDiagnostics<CR>
 " }}}
 
 " }}}
@@ -94,24 +101,12 @@ nnoremap gV `[v`]                               " highlight last inserted text
 inoremap {<CR> {<CR>}<ESC>O
 " }}}
 
-" [8] code format {{{
-
-" [8.1] for cpp
-function! FormatOnSave()
-    let l:formatdiff = 1
-    let l:uname = substitute(system('uname'), '\n', '', '') " detect system
-    if l:uname == 'Darwin'
-      pyf /usr/local/Cellar/clang-format/2019-05-14/share/clang/clang-format.py
-    else " Linux system
-      pyf /usr/share/clang/clang-format.py
-    endif
-endfunction
-autocmd BufWritePre *.h,*.cc,*.cpp call FormatOnSave()
-
+" [8] auto indent {{{
+set autoindent
 " }}}
 
-" [9] auto indent {{{
-set autoindent
+" [9] backspace {{{
+set backspace=2 " make backspace working normal
 " }}}
 
 " vim:foldmethod=marker:foldlevel=0
