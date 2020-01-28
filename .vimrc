@@ -21,6 +21,15 @@ inoremap <expr> <cr>    pumvisible() ? "\<C-y>" : "\<cr>"
 " [1.4] lsp {{{
 let g:lsp_signs_enabled = 1           " enable signs
 let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
+
+" use clangd for c/c++
+if executable('clangd')
+    au User lsp_setup call lsp#register_server({
+            \ 'name': 'clangd',
+            \ 'cmd': {server_info->['clangd', '-background-index']},
+            \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
+            \ })
+endif
 " }}}
 
 " }}}
