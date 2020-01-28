@@ -12,6 +12,17 @@ let g:lightline = {
       \ }
 " }}}
 
+" [1.3] asyncomplete {{{
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <cr>    pumvisible() ? "\<C-y>" : "\<cr>"
+" }}}
+
+" [1.4] lsp {{{
+let g:lsp_signs_enabled = 1           " enable signs
+let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
+" }}}
+
 " }}}
 
 " [2] colors {{{
