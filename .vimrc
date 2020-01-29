@@ -1,3 +1,5 @@
+let mapleader = ","
+
 " [1] plugins {{{
 
 " [1.1] gundo {{{
@@ -22,17 +24,28 @@ inoremap <expr> <cr>    pumvisible() ? "\<C-y>" : "\<cr>"
 let g:lsp_signs_enabled = 1           " enable signs
 let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
 
-" auto format on save c/c++ files
-autocmd BufWritePre *.h,*.cc,*.cpp LspDocumentFormat
+augroup lsp_setup
+    autocmd!
+    " auto format on save c/c++ files
+    autocmd BufWritePre *.h,*.cc,*.cpp LspDocumentFormat
+    " use clangd for c/c++
+    if executable('clangd')
+        autocmd User lsp_setup call lsp#register_server({
+                \ 'name': 'clangd',
+                \ 'cmd': {server_info->['clangd', '-background-index']},
+                \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
+                \ })
+    endif
+augroup END
 
-" use clangd for c/c++
-if executable('clangd')
-    au User lsp_setup call lsp#register_server({
-            \ 'name': 'clangd',
-            \ 'cmd': {server_info->['clangd', '-background-index']},
-            \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
-            \ })
-endif
+" lazy loading lsp
+command! IDE
+    \   packadd async
+    \ | packadd vim-lsp
+    \ | packadd asyncomplete
+    \ | packadd asyncomplete-lsp
+    \ | source $MYVIMRC
+    \ | call lsp#enable()
 
 " key bindings
 nnoremap <leader>h :LspHover<CR>
@@ -79,7 +92,6 @@ set modelines=1
 " }}}
 
 " [7] key mappings {{{
-let mapleader = ","
 
 nnoremap <leader>ev :tabnew ~/.vimrc<CR>        " open .vimrc for editing
 nnoremap <leader>sv :source ~/.vimrc<CR>        " source .vimrc for new configuration to take effect
