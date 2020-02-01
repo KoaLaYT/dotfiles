@@ -1,3 +1,4 @@
+set nocompatible
 let mapleader = ","
 
 " [1] plugins {{{
@@ -74,6 +75,7 @@ set cursorline		" highlight current line
 set wildmenu        " visual autocomplete for command menu
 set lazyredraw      " redraw only when we need to
 set showmatch       " highlight matching [{()}]
+set scrolloff=5     " set 5 lines up/down of cursor when scroll
 " }}}
 
 " [5] searching {{{
@@ -93,21 +95,25 @@ set modelines=1
 
 " [7] key mappings {{{
 
-nnoremap <leader>ev :tabnew ~/.vimrc<CR>        " open .vimrc for editing
-nnoremap <leader>sv :source ~/.vimrc<CR>        " source .vimrc for new configuration to take effect
+" open and source .vimrc for editing
+nnoremap <leader>ev :tabnew ~/.vimrc<CR>
+nnoremap <leader>sv :source ~/.vimrc<CR>
 
-inoremap jk <ESC>                               " changing esc to jk, for return to normal mode
+inoremap jk <ESC>
 inoremap <ESC> <NOP>
 
-inoremap <LEFT> <NOP>                           " no arrow key for moving cursor
+" no arrow key for moving cursor
+inoremap <LEFT> <NOP>
 inoremap <RIGHT> <NOP>
 inoremap <UP> <NOP>
 inoremap <DOWN> <NOP>
 
-nnoremap j gj                                   " move vertically by visual line
+" move cursor by vertical line
+nnoremap j gj
 nnoremap k gk
 
-nnoremap gV `[v`]                               " highlight last inserted text
+" highlight last inserted text
+nnoremap gV `[v`]
 
 " [7.1] auto closing
 inoremap {<CR> {<CR>}<ESC>O
