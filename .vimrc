@@ -53,6 +53,10 @@ nnoremap <leader>h :LspHover<CR>
 nnoremap <leader>e :LspDocumentDiagnostics<CR>
 " }}}
 
+" [1.5] ctrlp {{{
+let g:ctrlp_map = '<C-p>'
+" }}}
+
 " }}}
 
 " [2] colors {{{
