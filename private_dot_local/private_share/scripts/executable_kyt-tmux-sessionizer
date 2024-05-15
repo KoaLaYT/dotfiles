@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+if [[ $# -eq 2 ]]; then
+    selected=$1
+else
+    selected=$(find ~/Work/read2n ~/Work/metale ~/Downloads ~ ~/Projects ~/Labs -mindepth 1 -maxdepth 1 -type d | fzf)
+fi
+
+if [[ -z $selected ]]; then
+    exit 0
+fi
+
+selected_name=$(basename "$selected" | tr . _)
+
+# if tmux not running, start tmux with this session name
+if [[ -z $TMUX ]]; then
+    tmux new-session -s $selected_name -c $selected
+    exit 0
+fi
+
+# create a session with this name (-s) and cd into (-c)
+if ! tmux has-session -t=$selected_name 2> /dev/null; then
+    tmux new-session -ds $selected_name -c $selected
+fi
+
+# swtich to existing session
+tmux switch-client -t $selected_name
+
+# vim:tw=78:ts=8:ft=bash:norl:
