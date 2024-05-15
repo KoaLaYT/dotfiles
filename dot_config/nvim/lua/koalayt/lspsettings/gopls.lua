@@ -1,5 +1,4 @@
 return {
-    cmd = { 'gopls' },
     settings = {
         gopls = {
             hints = {
