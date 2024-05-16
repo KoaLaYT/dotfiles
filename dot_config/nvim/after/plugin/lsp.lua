@@ -1,5 +1,4 @@
 local lspconfig = require('lspconfig')
-local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 -- set border
 local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
@@ -13,21 +12,21 @@ end
 local langs = {
     'lua_ls',
     'gopls',
-    'clangd',
-    'rust_analyzer',
-    'sqls',
-    'zls',
-    'tsserver',
-    'toy',
+    -- 'clangd',
+    -- 'rust_analyzer',
+    -- 'sqls',
+    -- 'zls',
+    -- 'tsserver',
+    -- 'toy',
 }
 
 for _, lang in ipairs(langs) do
     local settings = require('koalayt.lspsettings.' .. lang)
-    lspconfig[lang].setup(vim.tbl_deep_extend('keep', capabilities, settings))
+    lspconfig[lang].setup(settings)
 end
 
 
-local augroup = vim.api.nvim_create_augroup('UserLspConfig', { clear = true })
+local augroup = vim.api.nvim_create_augroup('UserLspConfig', { clear = true, })
 vim.api.nvim_create_autocmd('LspAttach', {
     group = augroup,
     callback = function(ev)
@@ -35,20 +34,22 @@ vim.api.nvim_create_autocmd('LspAttach', {
         if not lsp_client then return end
 
         if lsp_client and lsp_client.server_capabilities.inlayHintProvider then
-            -- vim.g.inlay_hints_visible = true
             vim.lsp.inlay_hint.enable()
         end
         -- Buffer local mappings.
-        local opts = { buffer = ev.buf }
-        vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-        vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
-        vim.keymap.set('n', 'gd', ':Telescope lsp_definitions<CR>', opts)
-        vim.keymap.set('n', 'gi', ':Telescope lsp_implementations<CR>', opts)
-        vim.keymap.set('n', 'gt', vim.lsp.buf.type_definition, opts)
-        vim.keymap.set('n', 'gr', ':Telescope lsp_references<CR>', opts)
-        vim.keymap.set('n', 'gl', vim.diagnostic.open_float, opts)
-        vim.keymap.set('n', '<Leader>rn', vim.lsp.buf.rename, opts)
-        vim.keymap.set({ 'n', 'v' }, '<Leader>ca', vim.lsp.buf.code_action, opts)
+        local opts = { buffer = ev.buf, }
+        local map = function(mode, lhs, rhs)
+            vim.keymap.set(mode, lhs, rhs, opts)
+        end
+        map('n', 'K', vim.lsp.buf.hover)
+        map('n', 'gD', vim.lsp.buf.declaration)
+        map('n', 'gd', function() require('telescope.builtin').lsp_definitions({ show_line = false, }) end)
+        map('n', 'gi', function() require('telescope.builtin').lsp_implementations({ show_line = false, }) end)
+        map('n', 'gt', vim.lsp.buf.type_definition)
+        map('n', 'gr', function() require('telescope.builtin').lsp_references({ show_line = false, }) end)
+        map('n', 'gl', vim.diagnostic.open_float)
+        map('n', '<Leader>rn', vim.lsp.buf.rename)
+        map({ 'n', 'v', }, '<Leader>ca', vim.lsp.buf.code_action)
 
         local lsp_name = lsp_client.name
         -- sqls has formatting issue
@@ -60,10 +61,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
             group = augroup,
             buffer = ev.buf,
             callback = function(eev)
-                vim.lsp.buf.format({
-                    async = false,
-                })
+                vim.lsp.buf.format({ async = false, })
             end,
         })
-    end
+    end,
 })
